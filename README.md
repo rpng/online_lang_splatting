@@ -6,7 +6,21 @@
 **Preprocessed Dataset**: [DropBox]()  
 **Pretrained Models**: [DropBox]()
 
-![Teaser](media/teaser.png)
+<table>
+  <tr>
+    <td align="center">
+      <img src="media/langslam_sofa.gif" width="400px" alt="Sofa Demo"/><br/>
+      <b>Sofa</b>
+    </td>
+    <td align="center">
+      <img src="media/langslam_rug.gif" width="400px" alt="Rug Demo"/><br/>
+      <b>Rug</b>
+    </td>
+  </tr>
+</table>
+
+
+
 
 ---
 
