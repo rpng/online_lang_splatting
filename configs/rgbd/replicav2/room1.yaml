@@ -1,0 +1,22 @@
+inherit_from: "configs/rgbd/replicav2/base_config.yaml"
+Dataset:
+  dataset_path: "/media/datasets/Replica2/vmap/room_1/imap/00"
+  single_thread: False
+Results:
+  use_gui: False
+Training:
+  kf_interval: 4 #1
+  mapping_itr_num: 150 #15
+  gaussian_update_every: 150 #100
+  gaussian_update_offset: 50
+  gaussian_reset: 2001
+  size_threshold: 20 #5
+  use_gt_pose: False 
+language:
+  labels_from_file: False # if True, will load labels from a file (can be low res or high res langsplat labels) instead of running online language model
+  language_train: True # if True, will train for the language
+  single_stage_ae: True # if True, will use cross-data ae (pretrained on cross-data of replica), if false will use a 2-stage ae
+  auto_ckpt_path: "/home/autoencoder_coco_cross/mlp_run1/checkpoints/epoch=133-step=2948.ckpt" #uncomment this to use the pretrained model
+  hr_model: True
+  lang_code_size: 15
+  online_ckpt_path: "/media/Replica/omni_data_result/online_15_room0.pth"

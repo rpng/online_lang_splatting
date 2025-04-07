@@ -1,0 +1,42 @@
+name: LangGS
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - cudatoolkit=11.8
+  - plyfile=0.8.1
+  - python=3.8.19
+  - pip=22.3.1
+  - pytorch=1.13.0
+  - torchaudio=0.13.0
+  - torchvision=0.14.0
+  - tqdm
+  - pip:
+    - submodules/simple-knn
+    - submodules/diff-gaussian-rasterization
+    - opencv-python==4.8.1.78
+    - munch
+    - trimesh
+    - timm==1.9.0
+    - evo==1.11.0
+    - open3d==0.17.0
+    - torchmetrics
+    - imgviz
+    - PyOpenGL
+    - pytorch_lightning==1.9.0
+    - pydantic==1.10.18
+    - lightning==1.9.0
+    - glfw
+    - fastapi==0.88.0
+    - PyGLM
+    - wandb
+    - lpips
+    - rich
+    - ruff
+    - ftfy==6.0.1
+    - scipy==1.7.0
+    - regex
+    - einops
+    - imageio==2.4.1
+    - jaxtyping

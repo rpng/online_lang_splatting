@@ -1,0 +1,16 @@
+# ninja log v5
+0	10409	1726538019799029317	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/simple_knn.o	4e351bdf5a0a6d6
+0	22199	1726538031567055662	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/ext.o	d87180231d558f73
+0	37761	1726538047151090549	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/spatial.o	33c513aeb77cf6df
+11	9202	1726576092990475362	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/simple_knn.o	1ef78df24f3f4e91
+11	19545	1726576103306345024	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/ext.o	19dcab5b7685e9d3
+11	36972	1726576120758124867	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/spatial.o	d757a9a36a9cbba5
+11	9054	1726587428292761592	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/simple_knn.o	d98398ceabf87be1
+10	15721	1726587434952681556	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/ext.o	89d24edbf29a6e85
+11	37228	1726587456464423075	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/spatial.o	951cb54fa6f2f3fb
+13	10168	1727539725084007113	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/simple_knn.o	ed9b02395dc8862e
+12	16703	1727539731619925562	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/ext.o	9c5baf633444c743
+13	40097	1727539755015633893	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/spatial.o	ca65e070ff183586
+35	10812	1742587819266504551	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/simple_knn.o	829104b48ece0b49
+35	17086	1742587825546417323	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/ext.o	c90f0bf24fab7797
+36	40207	1742587848662097358	/home/saimouli/Desktop/Bosch/GaussianGripMapping/submodules/simple-knn/build/temp.linux-x86_64-cpython-38/spatial.o	b9022790dfec746b
