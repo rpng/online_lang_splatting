@@ -1,0 +1,13 @@
+cmake-build-*
+build
+Build
+dist
+*.*~
+.idea/
+doxgen_generated
+*.swp
+*.swo
+*.so
+doc
+.vscode
+__pycache__

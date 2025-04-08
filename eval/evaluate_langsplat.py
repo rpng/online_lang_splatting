@@ -18,7 +18,6 @@ from tqdm import tqdm
 from openclip_encoder import OpenCLIPNetwork
 import sys
 sys.path.append( os.path.dirname(os.path.dirname(os.path.realpath(__file__))) )
-#sys.path.append("/home/vision/Documents/GaussianGripMapping")
 from language.autoencoder.model import Autoencoder, AutoencoderLangsplat, AutoencoderLight
 import torch.nn.functional as F
 import re
@@ -92,69 +91,6 @@ def eval_gt_lerfdata(json_folder: Union[str, Path] = None, ouput_path: Path = No
         gt_ann[f'{idx}'] = img_ann
 
     return gt_ann, (h, w), img_paths
-
-# def eval_gt_lerfdata(json_folder: Union[str, Path] = None, ouput_path: Path = None) -> Dict:
-#     """
-#     organise lerf's gt annotations
-#     gt format:
-#         file name: frame_xxxxx.json
-#         file content: labelme format
-#     return:
-#         gt_ann: dict()
-#             keys: str(int(idx))
-#             values: dict()
-#                 keys: str(label)
-#                 values: dict() which contain 'bboxes' and 'mask'
-#     """
-#     gt_json_paths = sorted(glob.glob(os.path.join(str(json_folder), 'frame*.json')))
-#     img_paths = sorted(glob.glob(os.path.join(str(json_folder), 'frame*.jpg')))
-#     target_h, target_w = 480, 640
-    
-#     print("gt_json_paths: ", gt_json_paths)
-#     print("img_paths: ", img_paths)
-#     gt_ann = {}
-#     for js_path in gt_json_paths:
-#         img_ann = defaultdict(dict)
-#         with open(js_path, 'r') as f:
-#             gt_data = json.load(f)
-        
-#         orig_h, orig_w = gt_data['info']['height'], gt_data['info']['width']
-#         #h, w = 480, 640
-#         scale_x = target_w / orig_w
-#         scale_y = target_h / orig_h
-        
-#         idx = int(gt_data['info']['name'].split('_')[-1].split('.jpg')[0]) - 1 
-        
-#         for prompt_data in gt_data["objects"]:
-#             label = prompt_data['category']
-#             box = np.asarray(prompt_data['bbox']).reshape(-1)           # x1y1x2y2
-            
-#             # Resize the bounding box according to the new image size
-#             box[0] *= scale_x  # x1
-#             box[1] *= scale_y  # y1
-#             box[2] *= scale_x  # x2
-#             box[3] *= scale_y  # y2
-            
-#             mask = polygon_to_mask((orig_h, orig_w), prompt_data['segmentation'])
-#             resized_mask = cv2.resize(mask, (target_w, target_h), interpolation=cv2.INTER_NEAREST)
-            
-            
-#             if img_ann[label].get('mask', None) is not None:
-#                 resized_mask = stack_mask(img_ann[label]['mask'], resized_mask)
-#                 img_ann[label]['bboxes'] = np.concatenate(
-#                     [img_ann[label]['bboxes'].reshape(-1, 4), box.reshape(-1, 4)], axis=0)
-#             else:
-#                 img_ann[label]['bboxes'] = box
-#             img_ann[label]['mask'] = resized_mask
-            
-#             # # save for visulsization
-#             save_path = ouput_path / 'gt' / gt_data['info']['name'].split('.jpg')[0] / f'{label}.jpg'
-#             save_path.parent.mkdir(exist_ok=True, parents=True)
-#             vis_mask_save(resized_mask, save_path)
-#         gt_ann[f'{idx}'] = img_ann
-
-#     return gt_ann, (target_h, target_w), img_paths
-
 
 def activate_stream(sem_map, 
                     image, 
@@ -393,92 +329,6 @@ def evaluate_per_image(feat_dir, output_path, ae_ckpt_path, json_folder, mask_th
     
     logger.info(f"Overall mean IoU: {overall_mean_iou:.4f}")
     logger.info(f"Overall localization accuracy: {overall_acc:.4f}")
-    
-# @torch.no_grad()
-# def evaluate(feat_dir, output_path, ae_ckpt_path, json_folder, mask_thresh, encoder_hidden_dims, 
-#              decoder_hidden_dims, logger, clip_dim=768):
-#     #device1 = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#     #device2 = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
-    
-#     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#     colormap_options = colormaps.ColormapOptions(
-#         colormap="turbo",
-#         normalize=True,
-#         colormap_min=-1.0,
-#         colormap_max=1.0,
-#     )
-
-#     gt_ann, image_shape, image_paths = eval_gt_lerfdata(Path(json_folder), Path(output_path))
-#     eval_index_list = [int(idx) for idx in list(gt_ann.keys())]
-#     print("feat_dir: ", feat_dir)
-#     compressed_sem_feats = np.zeros((len(feat_dir), len(eval_index_list), *image_shape, 3), dtype=np.float32)
-#     print(compressed_sem_feats.shape)
-#     for i in range(len(feat_dir)):
-#         feat_paths_lvl = sorted(glob.glob(os.path.join(feat_dir[i], '*.npy')),
-#                                key=lambda file_name: int(os.path.basename(file_name).split(".npy")[0]))
-#         #print("feat_paths_lvl: ", feat_paths_lvl)
-#         for j, idx in enumerate(eval_index_list):
-#             array = np.load(feat_paths_lvl[idx])
-#             resized_array = cv2.resize(array, (image_shape[1], image_shape[0]))
-#             compressed_sem_feats[i][j] = resized_array
-
-#     # instantiate autoencoder and openclip
-#     clip_model = OpenCLIPNetwork(device)
-#     checkpoint = torch.load(ae_ckpt_path, map_location=device)
-#     model = AutoencoderLangsplat(encoder_hidden_dims, decoder_hidden_dims,clip_dim=clip_dim).to(device)
-#     model.load_state_dict(checkpoint)
-#     model.eval()
-
-#     chosen_iou_all, chosen_lvl_list = [], []
-#     acc_num = 0
-#     for j, idx in enumerate(tqdm(eval_index_list)):
-#         image_name = Path(output_path) / f'{idx+1:0>5}'
-#         image_name.mkdir(exist_ok=True, parents=True)
-        
-#         sem_feat = compressed_sem_feats[:, j, ...]
-#         sem_feat = torch.from_numpy(sem_feat).float().to(device)
-#         rgb_img = cv2.imread(image_paths[j])[..., ::-1]
-#         rgb_img = (rgb_img / 255.0).astype(np.float32)
-#         #reshape rgb img to match img shape
-#         rgb_img = cv2.resize(rgb_img, (image_shape[1], image_shape[0]))
-#         rgb_img = torch.from_numpy(rgb_img).to(device)
-
-#         with torch.no_grad():
-#             lvl, h, w, _ = sem_feat.shape
-#             new_h, new_w = 640, 480 # reshaped to save memory during evaluation
-#             reshaped_sem_feat = F.interpolate(sem_feat.permute(0, 3, 1, 2), 
-#                                               size=(new_h, new_w), mode='bilinear', align_corners=False).permute(0, 2, 3, 1)
-            
-#             restored_feat_reshape= model.decode(reshaped_sem_feat.flatten(0, 2))
-#             restored_feat_reshape = restored_feat_reshape.view(lvl, new_h, new_w, -1)           # 3x832x1264x512
-#             restored_feat = F.interpolate(restored_feat_reshape.permute(0, 3, 1, 2),
-#                                           size=(h,w), mode='bilinear',align_corners=False).permute(0, 2, 3, 1)
-        
-#         img_ann = gt_ann[f'{idx}']
-#         clip_model.set_positives(list(img_ann.keys()))
-#         print("activated stream...")
-#         c_iou_list, c_lvl = activate_stream(restored_feat, rgb_img, clip_model, image_name, img_ann,
-#                                             thresh=mask_thresh, colormap_options=colormap_options)
-#         chosen_iou_all.extend(c_iou_list)
-#         chosen_lvl_list.extend(c_lvl)
-#         print("activated stream...")
-#         acc_num_img = lerf_localization(restored_feat, rgb_img, clip_model, image_name, img_ann)
-#         acc_num += acc_num_img
-#         torch.cuda.empty_cache()
-#         del sem_feat, restored_feat, rgb_img
-
-#     # # iou
-#     mean_iou_chosen = sum(chosen_iou_all) / len(chosen_iou_all)
-#     logger.info(f'trunc thresh: {mask_thresh}')
-#     logger.info(f"iou chosen: {mean_iou_chosen:.4f}")
-#     logger.info(f"chosen_lvl: \n{chosen_lvl_list}")
-
-#     # localization acc
-#     total_bboxes = 0
-#     for img_ann in gt_ann.values():
-#         total_bboxes += len(list(img_ann.keys()))
-#     acc = acc_num / total_bboxes
-#     logger.info("Localization accuracy: " + f'{acc:.4f}')
 
 def seed_everything(seed_value):
     random.seed(seed_value)
@@ -549,27 +399,22 @@ if __name__ == "__main__":
     seed_everything(seed_num)
     
     parser = ArgumentParser(description="prompt any label")
-    parser.add_argument("--dataset_name", type=str, default="office3")
+    parser.add_argument("--dataset_name", type=str, help="room0")
     parser.add_argument("--clip_model_type", type=str, default="convnext_large_d_320")
     parser.add_argument("--clip_dim", type=int, default=768)
-    #feat_dir = "/media/sai/External HDD/sai/gaussian_gripper/langsplat/office4"
-    parser.add_argument('--root_dir', type=str, default="/media/sai/External HDD/sai/gaussian_gripper/langsplat/office3")
-    parser.add_argument('--label_name', type=str, default="label_ov")
-    #parser.add_argument("--ae_ckpt_dir", type=str, default=feat_dir+"/ae_ckpt/best_ckpt.pth")
-    #parser.add_argument("--output_dir", type=str, default=feat_dir+"/eval_results")
-    # parser.add_argument("--seg_file_config", type=str, 
-    #                     default="/media/sai/External HDD/sai/datasets/langslam/vmap/room_0/imap/00/semantic_config.yaml")
-    #parser.add_argument("--json_folder", type=str, default=feat_dir+"/label_1")
+    parser.add_argument('--root_dir', type=str, help="/media/langsplat/room0")
+    parser.add_argument('--label_name', type=str, default="label")
+
     parser.add_argument("--mask_thresh", type=float, default=0.4)
     parser.add_argument('--encoder_dims',
                         nargs = '+',
                         type=int,
-                        default=[384, 192, 96, 48, 24, 15], #[512, 256, 128, 64, 32, 3],
+                        default=[384, 192, 96, 48, 24, 15],
                         )
     parser.add_argument('--decoder_dims',
                         nargs = '+',
                         type=int,
-                        default=[24, 48, 96, 192, 384, 384, 768], #[16, 32 ,64 ,128, 256, 256, 512, 768],
+                        default=[24, 48, 96, 192, 384, 384, 768],
                         )
     parser.add_argument('--code_size', type=int, default=15)
     args = parser.parse_args()
@@ -584,49 +429,6 @@ if __name__ == "__main__":
     feat_dir = [os.path.join(args.root_dir, dataset_name + f"_{i}", "train/ours_None/renders_npy") for i in range(1,4)]
     print("feat_dir: ", feat_dir)
     output_path = os.path.join(output_dir, dataset_name+"_langsplat")
-    #ae_ckpt_path = os.path.join(args.ae_ckpt_dir, "best_ckpt.pth")
-    #ae_ckpt_path = args.ae_ckpt_dir
-    #json_folder = os.path.join(args.json_folder, dataset_name)
-    #json_folder = args.json_folder
-
-    #get top 10 labels from dataset
-    #seg_feat_dir = args.seg_file_config.replace('semantic_config.yaml', 'semantic_class')
-    #top_labels = get_top_labels(args.seg_file_config, seg_feat_dir)
-    
-    # for langsplat the images are sampled every 10th image
-    #Create json files
-    # sample_image_idx = [0, 24, 41]
-    # #user_label_names = [label[1] for label in top_labels]
-    # user_label_names = ['wall', 'window', 'floor', 'sofa', 'cushion', 'table', 'rug', 'lamp', 'book']
-    # print("User_label_names: ", user_label_names)
-    
-    # #user_label_names = ["door", "blinds", "stool", "cabinet", "vase", "rug"]
-    # image_paths = sorted(glob.glob(os.path.join(args.feat_dir, 'images', '*.jpg')))
-    #                      #key=lambda file_name: int(os.path.basename(file_name).split('/')[-1].split(".png")[0]))
-    # selected_images = [image_paths[i] for i in sample_image_idx if i < len(image_paths)]
-    # json_folder = args.feat_dir+"/labels"
-
-    # #don't have to rename 
-    # #path_mapping = rename_files_to_format(feat_dir[0], extension='.npy')
-    # #for i in range(0,3):
-    # rename_files_to_format(image_paths, feat_dir[1], extension='.npy')
-    #image_paths_renamed = sorted(glob.glob(os.path.join(args.feat_dir+"_rename", '*.npy')), key=lambda file_name: int(os.path.basename(file_name).split('_')[-1].split(".npy")[0]))
-    
-    #create semantic labels for the selected images
-    # for img_path in selected_images:
-    #     rgb_image = cv2.imread(img_path)
-    #     img_name = img_path.split('/')[-1].split('.')[0]
-    #     mapped_class = f"semantic_class_{int(''.join(filter(str.isdigit, img_name)))}"
-    #     seg_label = cv2.imread(args.seg_file_config.replace('semantic_config.yaml', 'semantic_class') 
-    #                            + "/" + mapped_class + ".png", cv2.IMREAD_UNCHANGED).astype(np.int32)
-        
-    #     seg_label = cv2.resize(seg_label, (rgb_image.shape[1], rgb_image.shape[0]), interpolation=cv2.INTER_NEAREST)
-    #     frame_number = str(''.join(filter(str.isdigit, img_name[-5:])))
-    #     output_json = json_folder+"/"+img_name+".json"
-    #     save_json_labels(args.seg_file_config, seg_label, output_json, img_name, user_label_names)
-    #     cv2.imwrite(json_folder+"/"+img_name+".png", rgb_image)
-
-    #rename_files_to_format(feat_dir[0], extension='.npy')
 
     # NOTE logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())

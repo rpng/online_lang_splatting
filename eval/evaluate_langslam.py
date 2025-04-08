@@ -350,76 +350,24 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_name", type=str, default="room0")
     parser.add_argument("--clip_model_type", type=str, default="convnext_large_d_320")
     parser.add_argument("--clip_dim", type=int, default=768)
-    parser.add_argument("--root_dir", type=str, default="/media/saimouli/Data6T/Replica/omni_data_result/room_0_small/2025-03-23-12-56-41/psnr/before_opt")
-    # parser.add_argument('--feat_dir', type=str, default=feat_dir+"/lang")
-    #parser.add_argument('--label_folder', type=str, default=feat_dir+"/label_3")
+    parser.add_argument("--root_dir", type=str, help="/media/room_0/2025-03-23-12-56-41/psnr/before_opt")
     parser.add_argument('--label_name', type=str, default="label")
     #parser.add_argument("--output_dir", type=str, default=feat_dir+"/eval_results")
-    parser.add_argument("--ae_ckpt_dir", type=str, default= "/home/saimouli/Desktop/Bosch/autoencoder_omni_cross/run1_code15_omni/lightning_logs/version_0/checkpoints/epoch=59-step=2520.ckpt")
-                        #"/media/sai/External HDD/sai/gaussian_gripper/room0_small/language_feats/auto/code15/run4/lightning_logs/version_0/checkpoints/epoch=145-step=3212.ckpt")
-                        #"/media/sai/External HDD/sai/gaussian_gripper/room0_small/language_feats/auto/code15/run2/lightning_logs/mlp_run2/checkpoints/epoch=244-step=4410.ckpt")
+    parser.add_argument("--ae_ckpt_dir", type=str)
     parser.add_argument("--mask_thresh", type=float, default=0.5)
     parser.add_argument('--encoder_dims',
                         nargs = '+',
                         type=int,
-                        default=[384, 192, 96, 48, 24, 15], #[512, 256, 128, 64, 32, 3],
+                        default=[384, 192, 96, 48, 24, 15],
                         )
     parser.add_argument('--decoder_dims',
                         nargs = '+',
                         type=int,
-                        default=[24, 48, 96, 192, 384, 384, 768], #[16, 32 ,64 ,128, 256, 256, 512, 768],
+                        default=[24, 48, 96, 192, 384, 384, 768],
                         )
     parser.add_argument('--code_size', type=int, default=15)
-    # parser.add_argument('--langslam_dir', type=str, default="results/langslam_Replica/run1_room0/psnr/before_opt")
-    # parser.add_argument('--langsplat_dir', type=str, 
-    #                     default="/media/sai/External HDD/sai/gaussian_gripper/langsplat/room0_code15")
-    # parser.add_argument('--seg_file_config', type=str, 
-    #                     default="/media/sai/External HDD/sai/datasets/langslam/vmap/room_0/imap/00/semantic_config.yaml")
     
     args = parser.parse_args()
-
-    # #Step 1: read images list from langsplat and langslam
-    # langsplat_img_list = get_image_list(os.path.join(args.langsplat_dir, 'images'))
-    # langslam_img_list = get_image_list(os.path.join(args.langslam_dir, 'gt'))
-    
-    # #Step 2: for common image names randomy select 7 images and its index
-    # langsplat_numeric_map = {int(extract_numeric_part(f)): f for f in langsplat_img_list}
-    # langslam_numeric_map = {int(extract_numeric_part(f)): f for f in langslam_img_list}
-    
-    # common_numeric_keys = list(set(langsplat_numeric_map.keys()).intersection(set(langslam_numeric_map.keys())))
-    # selected_numeric_keys = random.sample(common_numeric_keys, 7)
-    
-    # langsplat_selected_images = [langsplat_numeric_map[key] for key in selected_numeric_keys]
-    # langsplat_indices = [langsplat_img_list.index(image) for image in langsplat_selected_images]
-    
-    # langslam_selected_images = [langslam_numeric_map[key] for key in selected_numeric_keys]
-    # langslam_indices = [langslam_img_list.index(image) for image in langslam_selected_images]
-    
-    # #Step 3: create label files for langslam and langsplat
-    # seg_feat_dir = args.seg_file_config.replace('semantic_config.yaml', 'semantic_class')
-    
-    # top_labels = get_top_labels(args.seg_file_config, seg_feat_dir)
-    # #create a list
-    # user_label_names = [label[1] for label in top_labels]
-    # process_images_labels(args, langsplat_selected_images, langsplat_indices, 
-    #                       args.langsplat_dir, os.path.join(args.langsplat_dir, 'images'), top_labels=user_label_names)
-    # process_images_labels(args, langslam_selected_images, langslam_indices, 
-    #                       args.langslam_dir, os.path.join(args.langslam_dir, 'gt'), top_labels=user_label_names)
-    
-    # # NOTE config setting
-    # dataset_name = args.dataset_name
-    # feat_dir = [os.path.join(args.feat_dir, dataset_name + f"_{i}", "train/ours_None/renders_npy") for i in range(1,4)]
-    # print("feat_dir: ", feat_dir)
-    # output_path = os.path.join(args.output_dir, dataset_name+"_langsplat")
-    # #ae_ckpt_path = os.path.join(args.ae_ckpt_dir, "best_ckpt.pth")
-    # ae_ckpt_path = args.ae_ckpt_dir
-    # #json_folder = os.path.join(args.json_folder, dataset_name)
-    # json_folder = args.json_folder
-    
-    # # NOTE logger
-    # timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    # os.makedirs(output_path, exist_ok=True)
-    # log_file = os.path.join(output_path, f'{timestamp}.log')
 
     feat_dir = [os.path.join(args.root_dir, "lang")]
     label_folder = os.path.join(args.root_dir, args.label_name)

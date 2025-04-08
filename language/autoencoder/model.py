@@ -10,7 +10,6 @@ from eval.colormaps import apply_pca_colormap
 import matplotlib.pyplot as plt
 import open_clip
 import torchvision.models as models
-from torchvision.models.efficientnet import MBConv, Conv2dNormActivation
 from sklearn.decomposition import IncrementalPCA
 
 class AutoencoderMLP(nn.Module):
@@ -70,7 +69,7 @@ class AutoencoderLight(pl.LightningModule):
         if self.isMLP:
             self.model = AutoencoderMLP(encoder_hidden_dims, decoder_hidden_dims, in_channel_dim)
         else:
-            self.model = Autoencoder(encoder_hidden_dims, decoder_hidden_dims, in_channel_dim)
+            pass
         #self.l2_loss = nn.MSELoss()
         #self.cos_loss = nn.CosineEmbeddingLoss() #nn.CosineSimilarity(dim=1) #nn.CosineEmbeddingLoss()
     
@@ -332,7 +331,7 @@ class EncoderDecoderOnline(nn.Module):
                 nn.ReLU(),
                 nn.Linear(24, input_dim)
             )
-        elif method == 'pca':
+        elif method == 'pca': # We found mlp autoencoder is better than PCA
             # Placeholder for PCA model, trained incrementally
             self.pca = IncrementalPCA(n_components=compressed_dim)
             self.compressed_dim = compressed_dim

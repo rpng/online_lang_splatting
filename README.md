@@ -90,7 +90,23 @@ for room0.yaml edit `dataset_path` to point to the room0 dataset and `online_ckp
 In base_config.yaml point `auto_ckpt_path` and `hr_ckpt_path` to the respective files and in room0.yaml set `single_stage_ae` to `False`.
 
 ### To Run ▶️ 1-Stage Pipeline
-In room0.yaml point `auto_ckpt_path` to the cross data generalization file and set `single_stage_ae` to `True`.
+To run the 1-stage pipeline, open `room0.yaml` and update the following parameters:
+- Set `auto_ckpt_path` to the cross-data generalization checkpoint file.
+- Set `single_stage_ae` to `True`.
+
+We use a 4-split strategy for training:
+- **Split 1**: `office0`, `room0`  
+- **Split 2**: `office1`, `room1`  
+- **Split 3**: `office2`, `room2`  
+- **Split 4**: `office3`, `office4` 
+Training and Testing Example for 4-Split Strategy:
+- **Run 1**: Train on Splits 2, 3, 4 → Test on Split 1  
+- **Run 2**: Train on Splits 1, 3, 4 → Test on Split 2  
+- **Run 3**: Train on Splits 1, 2, 4 → Test on Split 3  
+- **Run 4**: Train on Splits 1, 2, 3 → Test on Split 4  
+
+The weights are in the pretrained weights folder. Use appropriate weights
+**Example**: For evaluating on `room0` and `office0`, use weights from **Run 1**.
 
 ```bash
 python3 slam.py --config configs/rgbd/replicav2/room0.yaml
