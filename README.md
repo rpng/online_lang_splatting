@@ -24,13 +24,11 @@
 
 ---
 
-## 🔔 Note
+## 🔔 Highlights
 
-With minor modifications to the SLAM pipeline, our models can be integrated into Gaussian Splatting-based SLAM systems.
-
-This release includes a clean implementation of our core model, along with disentangled optimization available under submodules for reference. Note that integrating disentangled optimization requires a high-performance GPU, which we plan to support in future releases.
-
-We’re actively working on improving the pipeline for higher speed, larger-scale datasets, and broader compatibility — stay tuned for upcoming updates!
+- Our method realize Gaussian Splatting and open-vocabulary-preserving language mapping simultenuously in an online SLAM framework.
+- This release include both the integrated framework, and the plug-in-and-play pretrained network modules producing dense and sharp CLIP maps (192x192x768) beyond real-time speed, e.g., >40 FPS.
+- We’re actively working on improving the pipeline for higher speed, larger-scale datasets, and broader compatibility — stay tuned for upcoming updates!
 
 ---
 
