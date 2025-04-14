@@ -3,8 +3,7 @@
 [Saimouli Katragadda](https://saimouli.github.io/), [Cho-Ying Wu](https://choyingw.github.io), [Yuliang Guo†](https://yuliangguo.github.io/), [Xinyu Huang](https://scholar.google.com/citations?user=cL4bNBwAAAAJ&hl=en), [Guoquan Huang](https://udel.edu/~ghuang/), [Liu Ren](https://sites.google.com/site/liurenshomepage/)  
 († indicates corresponding author)  
 [**Webpage**](https://saimouli.github.io/onlineLang/) | [**Paper**](https://arxiv.org/pdf/2503.09447) | [**Video**](https://www.youtube.com/watch?v=GIldru2006k&feature=youtu.be)  
-**Preprocessed Dataset**: [DropBox]()  
-**Pretrained Models**: [DropBox]()
+**Pretrained Models**: [HuggingFace](https://huggingface.co/datasets/slamDev/OnlineLanguageSplatting/tree/main) -> contains pre-trained weights for models
 
 <table>
   <tr>
@@ -72,8 +71,8 @@ Edit ```language/configs/convnextB_768.yaml``` and Set the  ```WEIGHTS``` to the
 python create_lang_model.py
 ```
 
-# 🧠 Language
-To test language feature
+# 🧠 Language Features Demo
+To test language feature on your own image, run
 ```bash
 python3 language/language_features.py --high-res-model "high_res_71_indoor.ckpt" --lang-model "seg_clip_model_l.pth" --input "test.png" --query-text "checkerboard"
 ```
@@ -159,11 +158,11 @@ python3 3d_evaluation_and_visualize_langsplat.py
 
 🧪 Training
 ### To train your own AE on your domain for 1-stage
+Language feature script can be used to save high or low resolution langauge features labels to train auto encoder on your own domain. 
+
 ```bash
 python3 language/autoencoder/train_encoder_light.py
 ```
-
-We provide sample evaluations for room0 here:
 
 # 🧬 Reprodicibility
 There might be minor differences between the released version and the results in the paper. Please bear in mind that multi-process performance has some randomness due to GPU utilisation. We run all our experiments on an RTX A4500 GPU, and the performance may differ when running with a different GPU.
