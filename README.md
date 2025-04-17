@@ -44,7 +44,7 @@ unzip vmap.zip
 ```
 ## 🛠️ Installation
 ```bash
-git clone https://github.com/saimouli/GaussianGripMapping.git --recursive
+git clone https://github.com/rpng/online_lang_splatting.git --recursive
 cd GaussianGripMapping
 ```
 Setup the environment.
