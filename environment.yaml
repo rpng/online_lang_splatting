@@ -1,6 +1,5 @@
 name: LangGS
 channels:
-  - pytorch
   - conda-forge
   - defaults
 dependencies:
@@ -9,7 +8,6 @@ dependencies:
   - python=3.8.19
   - pip=22.3.1
   - pytorch=1.13.0
-  - torchaudio=0.13.0
   - torchvision=0.14.0
   - tqdm
   - pip:
@@ -18,7 +16,7 @@ dependencies:
     - opencv-python==4.8.1.78
     - munch
     - trimesh
-    - timm==1.9.0
+    - timm==1.0.9
     - evo==1.11.0
     - open3d==0.17.0
     - torchmetrics

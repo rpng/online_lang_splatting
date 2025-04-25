@@ -57,7 +57,8 @@ conda activate LangGS
 💬 Language Model Setup
 
 ```bash
-cd langauge/sed/open_clip && make install
+cd langauge/sed/open_clip 
+make install
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 Download language model weights from 
@@ -65,16 +66,19 @@ Download language model weights from
 https://drive.google.com/file/d/1zAXE0QXy47n0cVn7j_2cSR85eqxdDGg8/view?usp=drive_link
 
 ```
-Edit ```language/configs/convnextB_768.yaml``` and Set the  ```WEIGHTS``` to the path of the downloaded language model weights
+Edit ```language/configs/convnextL_768.yaml``` and Set the  ```WEIGHTS``` to the path of the downloaded language model weights
 
 ```bash
-python create_lang_model.py
+cd online_lang_splatting
+python create_lang_model.py --config language/configs/convnextL_768.yaml
 ```
 
 # 🧠 Language Features Demo
+Downlod the pre-trained weights. We use omni_general indoor trained weights
+
 To test language feature on your own image, run
 ```bash
-python3 language/language_features.py --high-res-model "high_res_71_indoor.ckpt" --lang-model "seg_clip_model_l.pth" --input "test.png" --query-text "checkerboard"
+python3 language/language_features.py --high-res-model "high_res_71_indoor.ckpt" --lang-model "seg_clip_model_l.pth" --input "sample/replica_room0.jpg" --query-text "vase"
 ```
 
 # 🧭 Running the Pipeline
