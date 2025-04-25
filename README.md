@@ -45,7 +45,7 @@ unzip vmap.zip
 ## 🛠️ Installation
 ```bash
 git clone https://github.com/rpng/online_lang_splatting.git --recursive
-cd GaussianGripMapping
+cd online_lang_splatting
 ```
 Setup the environment.
 
